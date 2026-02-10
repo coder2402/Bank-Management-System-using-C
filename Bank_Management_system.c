@@ -80,7 +80,7 @@ void new_acc()
     }
     add.acc_no=check.acc_no;
     printf("\nEnter the name:");
-    scanf("%s",add.name);
+    scanf("%59s",add.name);
     
     printf("\nEnter the date of birth(mm/dd/yyyy):");
     scanf("%d/%d/%d",&add.dob.month,&add.dob.day,&add.dob.year);
@@ -89,10 +89,10 @@ void new_acc()
     scanf("%d",&add.age);
     
     printf("\nEnter the address:");
-    scanf("%s",add.address);
+    scanf("%59s",add.address);
     
     printf("\nEnter the citizenship number:");
-    scanf("%s",add.citizenship);
+    scanf("%14s",add.citizenship);
     
     printf("\nEnter the phone number: ");
     scanf("%lf",&add.phone);
@@ -101,7 +101,7 @@ void new_acc()
     scanf("%f",&add.amt);
     
     printf("\nType of account:\n\t#Saving\n\t#Current\n\t#Fixed1(for 1 year)\n\t#Fixed2(for 2 years)\n\t#Fixed3(for 3 years)\n\n\tEnter your choice:");
-    scanf("%s",add.acc_type);
+    scanf("%9s",add.acc_type);
     
     // Here we print a set of character from a record that we added recently using fprintf functiont
     fprintf(ptr,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
@@ -194,7 +194,7 @@ void edit(void)
             if(choice==1)
             {
                 printf("Enter the new address:");
-                scanf("%s",upd.address);
+                scanf("%59s",upd.address);
                 // Here we print a set of character from a record that we added recently using fprintf function
                 fprintf(newrec,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,upd.address,add.citizenship,add.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
                 system("cls");
@@ -483,7 +483,7 @@ void see(void)
     }
     else if (choice==2)
     {   printf("Enter the name:");
-        scanf("%s",&check.name);
+        scanf("%59s",check.name);
         while (fscanf(ptr,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
         {
             // strcmpi function returns 0 if the given two strings are same, a negative when first>second, positive when first<second.
@@ -608,7 +608,7 @@ int main()
     int i=0;
     system("cls");
     printf("\n\n\t\tEnter the password to login:");
-    scanf("%s",pass);
+    scanf("%9s",pass);
     
     if (strcmp(pass,password)==0)
     {
