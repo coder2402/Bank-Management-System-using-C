@@ -67,7 +67,7 @@ void new_acc()
     scanf("%d",&check.acc_no);
     
     // Here we read a set of character from a record using fsacnf function and iterate through all the data
-    while(fscanf(ptr,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+    while(fscanf(ptr,"%d %59s %d/%d/%d %d %59s %14s %lf %9s %f %d/%d/%d\n",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
     {
         // This function checks if the acc we are trying to create has not been created already
         if (check.acc_no==add.acc_no)
@@ -80,7 +80,7 @@ void new_acc()
     }
     add.acc_no=check.acc_no;
     printf("\nEnter the name:");
-    scanf("%s",add.name);
+    scanf("%59s",add.name);
     
     printf("\nEnter the date of birth(mm/dd/yyyy):");
     scanf("%d/%d/%d",&add.dob.month,&add.dob.day,&add.dob.year);
@@ -89,10 +89,10 @@ void new_acc()
     scanf("%d",&add.age);
     
     printf("\nEnter the address:");
-    scanf("%s",add.address);
+    scanf("%59s",add.address);
     
     printf("\nEnter the citizenship number:");
-    scanf("%s",add.citizenship);
+    scanf("%14s",add.citizenship);
     
     printf("\nEnter the phone number: ");
     scanf("%lf",&add.phone);
@@ -101,7 +101,7 @@ void new_acc()
     scanf("%f",&add.amt);
     
     printf("\nType of account:\n\t#Saving\n\t#Current\n\t#Fixed1(for 1 year)\n\t#Fixed2(for 2 years)\n\t#Fixed3(for 3 years)\n\n\tEnter your choice:");
-    scanf("%s",add.acc_type);
+    scanf("%9s",add.acc_type);
     
     // Here we print a set of character from a record that we added recently using fprintf functiont
     fprintf(ptr,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
@@ -138,7 +138,7 @@ void view_list()
     printf("\nACC. NO.\tNAME\t\t\tADDRESS\t\t\tPHONE\n");
 
     // Here we read a set of character from a record using fsacnf function and iterate through all the data
-    while(fscanf(view,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+    while(fscanf(view,"%d %59s %d/%d/%d %d %59s %14s %lf %9s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
     {
         printf("\n%6d\t %10s\t\t\t%10s\t\t%.0lf",add.acc_no,add.name,add.address,add.phone);
         test++;
@@ -184,7 +184,7 @@ void edit(void)
     scanf("%d",&upd.acc_no);
     
     // Here we read a set of character from a record using fsacnf function and iterate through all the data
-    while(fscanf(old,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+    while(fscanf(old,"%d %59s %d/%d/%d %d %59s %14s %lf %9s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
     {
         if (add.acc_no==upd.acc_no)
         {   test=1;
@@ -194,7 +194,7 @@ void edit(void)
             if(choice==1)
             {
                 printf("Enter the new address:");
-                scanf("%s",upd.address);
+                scanf("%59s",upd.address);
                 // Here we print a set of character from a record that we added recently using fprintf function
                 fprintf(newrec,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,upd.address,add.citizenship,add.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
                 system("cls");
@@ -275,7 +275,7 @@ void transact(void)
     scanf("%d", &transaction.acc_no);
 
     // Here we read a set of character from a record using fsacnf function and iterate through all the data
-    while (fscanf(old,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+    while (fscanf(old,"%d %59s %d/%d/%d %d %59s %14s %lf %9s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
     {
             if(add.acc_no==transaction.acc_no)
             {   
@@ -369,7 +369,7 @@ void erase(void)
     scanf("%d",&rem.acc_no);
     
     // Here we read a set of character from a record using fsacnf function and iterate through all the data
-    while (fscanf(old,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+    while (fscanf(old,"%d %59s %d/%d/%d %d %59s %14s %lf %9s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
     {
         if(add.acc_no!=rem.acc_no)
             fprintf(newrec,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
@@ -437,7 +437,7 @@ void see(void)
         scanf("%d",&check.acc_no);
 
         // Here we read a set of character from a record using fsacnf function and iterate through all the data
-        while (fscanf(ptr,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+        while (fscanf(ptr,"%d %59s %d/%d/%d %d %59s %14s %lf %9s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
         {
             if(add.acc_no==check.acc_no)
             {   system("cls");
@@ -483,8 +483,8 @@ void see(void)
     }
     else if (choice==2)
     {   printf("Enter the name:");
-        scanf("%s",&check.name);
-        while (fscanf(ptr,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+        scanf("%59s",check.name);
+        while (fscanf(ptr,"%d %59s %d/%d/%d %d %59s %14s %lf %9s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
         {
             // strcmpi function returns 0 if the given two strings are same, a negative when first>second, positive when first<second.
             if(strcmpi(add.name,check.name)==0)
@@ -608,7 +608,7 @@ int main()
     int i=0;
     system("cls");
     printf("\n\n\t\tEnter the password to login:");
-    scanf("%s",pass);
+    scanf("%9s",pass);
     
     if (strcmp(pass,password)==0)
     {
