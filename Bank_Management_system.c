@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include<windows.h>
 int i,j;
 int main_exit;
@@ -45,7 +46,8 @@ void close(void)
 {
     printf("\n\n\n\nThanks for visit!!\n");
     printf("\n\n\n\nBy:-\n");
-    printf("\t\tYash shah");
+    printf("\t\tYash shah\n");
+    exit(0);
 }
 
 void new_acc()
@@ -114,7 +116,7 @@ void new_acc()
     scanf("%d",&main_exit);
     system("cls");
     if (main_exit==1)
-        menu();
+        return;
     else if(main_exit==0)
             close();
     else
@@ -156,7 +158,7 @@ void view_list()
         scanf("%d",&main_exit);
         system("cls");
         if (main_exit==1)
-            menu();
+            return;
         else if(main_exit==0)
             close();
         else
@@ -173,6 +175,8 @@ void edit(void)
     int choice,test=0;
     // We created 2 file one is our originaal file and second one in which we will edit
     FILE *old,*newrec;
+    edit_start:
+    test=0;
     // Here we create a file in reading mode only
     // r -> open the file for reading only
     old = fopen("record.dat", "r");
@@ -234,11 +238,11 @@ void edit(void)
                 system("cls");
                 if (main_exit==1)
 
-                    menu();
+                    return;
                 else if (main_exit==2)
                     close();
                 else if(main_exit==0)
-                    edit();
+                    goto edit_start;
                 else
                 {   
                     printf("\nInvalid!\a");
@@ -252,7 +256,7 @@ void edit(void)
             scanf("%d",&main_exit);
             system("cls");
             if (main_exit==1)
-                menu();
+                return;
             else
                 close();
         }
@@ -262,6 +266,8 @@ void edit(void)
 void transact(void)
 {
     int choice, test = 0;
+    transact_start:
+    test=0;
     // We created 2 file one is our originaal file and second one in which we will edit
     FILE *old, *newrec;
     // Here we create a file in reading mode only
@@ -286,7 +292,7 @@ void transact(void)
                     printf("\a\a\a\n\nYOU CANNOT DEPOSIT OR WITHDRAW CASH IN FIXED ACCOUNTS!!!!!");
                     fordelay(1000000000);
                     system("cls");
-                    menu();
+                    return;
 
                 }
                 printf("\n\nDo you want to\n1.Deposit\n2.Withdraw?\n\nEnter your choice(1 for deposit and 2 for withdraw):");
@@ -328,9 +334,9 @@ void transact(void)
         scanf("%d",&main_exit);
         system("cls");
         if (main_exit==0)
-            transact();
+            goto transact_start;
         else if (main_exit==1)
-            menu();
+            return;
         else if (main_exit==2)
             close();
         else
@@ -345,7 +351,7 @@ void transact(void)
         scanf("%d",&main_exit);
         system("cls");
         if (main_exit==1)
-            menu();
+            return;
         else
             close();
     }
@@ -357,6 +363,7 @@ void erase(void)
 {
     // We created 2 file one is our originaal file and second one in which we will edit
     FILE *old, *newrec;
+    erase_start:
     // Here we create a file in reading mode only
     // r -> open the file for reading only
     old = fopen("record.dat", "r");
@@ -392,11 +399,11 @@ void erase(void)
               scanf("%d",&main_exit);
 
                  if (main_exit==1)
-                    menu();
+                    return;
                 else if (main_exit==2)
                     close();
                 else if(main_exit==0)
-                    erase();
+                    goto erase_start;
                 else
                 {
                     printf("\nInvalid!\a");
@@ -409,7 +416,7 @@ void erase(void)
         scanf("%d",&main_exit);
         system("cls");
         if (main_exit==1)
-            menu();
+            return;
         else
             close();
     }
@@ -420,6 +427,7 @@ void erase(void)
 void see(void)
 {
     FILE *ptr;
+    see_start:
     int test=0,rate;
     int choice;
     float time;
@@ -541,11 +549,11 @@ void see(void)
                 scanf("%d",&main_exit);
                 system("cls");
                 if (main_exit==1)
-                    menu();
+                    return;
                 else if (main_exit==2)
                     close();
                 else if(main_exit==0)
-                    see();
+                    goto see_start;
                 else
                 {
                     system("cls");
@@ -561,7 +569,7 @@ void see(void)
     if (main_exit==1)
     {
         system("cls");
-        menu();
+        return;
     }
     else
     {
@@ -606,6 +614,8 @@ int main()
 {
     char pass[10],password[10]="12345";
     int i=0;
+    while(1)
+    {
     system("cls");
     printf("\n\n\t\tEnter the password to login:");
     scanf("%s",pass);
@@ -619,7 +629,10 @@ int main()
             printf(".");
         }
         system("cls");
-        menu();
+        while(1)
+        {
+            menu();
+        }
     }
     else
     {   
@@ -630,7 +643,7 @@ int main()
             if (main_exit==1)
             {
                 system("cls");
-                main();
+                continue;
             }
             else if (main_exit==0)
             {
@@ -645,6 +658,7 @@ int main()
                 goto login_try;
             }
 
+    }
     }
     return 0;
 }
