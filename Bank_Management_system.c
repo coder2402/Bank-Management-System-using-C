@@ -1,6 +1,16 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#ifdef _WIN32
 #include<windows.h>
+#define CLEAR "cls"
+#else
+#include<unistd.h>
+#include<strings.h>
+#define strcmpi strcasecmp
+#define CLEAR "clear"
+#endif
+
 int i,j;
 int main_exit;
 void menu();
@@ -36,12 +46,15 @@ float interest(float t,float amount,int rate)
 // Delay function is used to suspend execution of a program for a particular time.
 void fordelay(int j)
 {
-    int i,k;
-    for(i=0;i<j;i++)
-         k=i;
+    // Replaced busy-wait loop with sleep for CPU efficiency
+    #ifdef _WIN32
+    Sleep(j/500000);
+    #else
+    usleep(j/500);
+    #endif
 }
 
-void close(void)
+void close_program(void)
 {
     printf("\n\n\n\nThanks for visit!!\n");
     printf("\n\n\n\nBy:-\n");
@@ -59,7 +72,7 @@ void new_acc()
     ptr=fopen("record.dat","a+");
     account_no:
     // Cls is a command to clear the output screen
-    system("cls");
+    system(CLEAR);
     printf("\t\t\t\xB2\xB2\xB2 ADD RECORD  \xB2\xB2\xB2\xB2");
     printf("\n\n\nEnter today's date(mm/dd/yyyy):");
     scanf("%d/%d/%d",&add.deposit.month,&add.deposit.day,&add.deposit.year);
@@ -112,11 +125,11 @@ void new_acc()
     add_invalid:
     printf("\n\n\n\t\tEnter 1 to go to the main menu and 0 to exit:");
     scanf("%d",&main_exit);
-    system("cls");
+    system(CLEAR);
     if (main_exit==1)
         menu();
     else if(main_exit==0)
-            close();
+            close_program();
     else
     {
         printf("\nInvalid!\a");
@@ -134,7 +147,7 @@ void view_list()
     view = fopen("record.dat", "r");
     int test = 0;
     // Cls is a command to clear the output screen
-    system("cls");
+    system(CLEAR);
     printf("\nACC. NO.\tNAME\t\t\tADDRESS\t\t\tPHONE\n");
 
     // Here we read a set of character from a record using fsacnf function and iterate through all the data
@@ -148,17 +161,17 @@ void view_list()
     fclose(view);
     if (test==0)
     {
-        system("cls");
+        system(CLEAR);
         printf("\nNO RECORDS!!\n");
     }
     view_list_invalid:
         printf("\n\nEnter 1 to go to the main menu and 0 to exit:");
         scanf("%d",&main_exit);
-        system("cls");
+        system(CLEAR);
         if (main_exit==1)
             menu();
         else if(main_exit==0)
-            close();
+            close_program();
         else
         {
             printf("\nInvalid!\a");
@@ -190,14 +203,14 @@ void edit(void)
         {   test=1;
             printf("\nWhich information do you want to change?\n1.Address\n2.Phone\n\nEnter your choice(1 for address and 2 for phone):");
             scanf("%d",&choice);
-            system("cls");
+            system(CLEAR);
             if(choice==1)
             {
                 printf("Enter the new address:");
                 scanf("%59s",upd.address);
                 // Here we print a set of character from a record that we added recently using fprintf function
                 fprintf(newrec,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,upd.address,add.citizenship,add.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
-                system("cls");
+                system(CLEAR);
                 printf("Changes saved!");
             }
             else if(choice==2)
@@ -206,7 +219,7 @@ void edit(void)
                 scanf("%lf",&upd.phone);
                 // Here we print a set of character from a record that we added recently using fprintf function
                 fprintf(newrec,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,upd.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
-                system("cls");
+                system(CLEAR);
                 printf("Changes saved!");
             }
         }
@@ -226,17 +239,17 @@ void edit(void)
 
     if(test!=1)
         {   
-            system("cls");
+            system(CLEAR);
             printf("\nRecord not found!!\a\a\a");
             edit_invalid:
                 printf("\nEnter 0 to try again,1 to return to main menu and 2 to exit:");
                 scanf("%d",&main_exit);
-                system("cls");
+                system(CLEAR);
                 if (main_exit==1)
 
                     menu();
                 else if (main_exit==2)
-                    close();
+                    close_program();
                 else if(main_exit==0)
                     edit();
                 else
@@ -250,11 +263,11 @@ void edit(void)
         {
             printf("\n\n\nEnter 1 to go to the main menu and 0 to exit:");
             scanf("%d",&main_exit);
-            system("cls");
+            system(CLEAR);
             if (main_exit==1)
                 menu();
             else
-                close();
+                close_program();
         }
 }
 
@@ -285,7 +298,7 @@ void transact(void)
                 {
                     printf("\a\a\a\n\nYOU CANNOT DEPOSIT OR WITHDRAW CASH IN FIXED ACCOUNTS!!!!!");
                     fordelay(1000000000);
-                    system("cls");
+                    system(CLEAR);
                     menu();
 
                 }
@@ -326,13 +339,13 @@ void transact(void)
         transact_invalid:
         printf("\n\n\nEnter 0 to try again,1 to return to main menu and 2 to exit:");
         scanf("%d",&main_exit);
-        system("cls");
+        system(CLEAR);
         if (main_exit==0)
             transact();
         else if (main_exit==1)
             menu();
         else if (main_exit==2)
-            close();
+            close_program();
         else
         {
             printf("\nInvalid!");
@@ -343,11 +356,11 @@ void transact(void)
     {
        printf("\nEnter 1 to go to the main menu and 0 to exit:");
         scanf("%d",&main_exit);
-        system("cls");
+        system(CLEAR);
         if (main_exit==1)
             menu();
         else
-            close();
+            close_program();
     }
 
 }
@@ -394,7 +407,7 @@ void erase(void)
                  if (main_exit==1)
                     menu();
                 else if (main_exit==2)
-                    close();
+                    close_program();
                 else if(main_exit==0)
                     erase();
                 else
@@ -407,11 +420,11 @@ void erase(void)
     {
         printf("\nEnter 1 to go to the main menu and 0 to exit:");
         scanf("%d",&main_exit);
-        system("cls");
+        system(CLEAR);
         if (main_exit==1)
             menu();
         else
-            close();
+            close_program();
     }
 }
 
@@ -440,7 +453,7 @@ void see(void)
         while (fscanf(ptr,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
         {
             if(add.acc_no==check.acc_no)
-            {   system("cls");
+            {   system(CLEAR);
                 test=1;
 
                 printf("\nAccount NO.:%d\nName:%s \nDOB:%d/%d/%d \nAge:%d \nAddress:%s \nCitizenship No:%s \nPhone number:%.0lf \nType Of Account:%s \nAmount deposited:$ %.2f \nDate Of Deposit:%d/%d/%d\n\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,
@@ -489,7 +502,7 @@ void see(void)
             // strcmpi function returns 0 if the given two strings are same, a negative when first>second, positive when first<second.
             if(strcmpi(add.name,check.name)==0)
             {   
-                system("cls");
+                system(CLEAR);
                 test=1;
                 printf("\nAccount No.:%d\nName:%s \nDOB:%d/%d/%d \nAge:%d \nAddress:%s \nCitizenship No:%s \nPhone number:%.0lf \nType Of Account:%s \nAmount deposited:$%.2f \nDate Of Deposit:%d/%d/%d\n\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,
                 add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
@@ -534,21 +547,21 @@ void see(void)
     fclose(ptr);
     if(test!=1)
         {   
-            system("cls");
+            system(CLEAR);
             printf("\nRecord not found!!\a\a\a");
             see_invalid:
                 printf("\nEnter 0 to try again,1 to return to main menu and 2 to exit:");
                 scanf("%d",&main_exit);
-                system("cls");
+                system(CLEAR);
                 if (main_exit==1)
                     menu();
                 else if (main_exit==2)
-                    close();
+                    close_program();
                 else if(main_exit==0)
                     see();
                 else
                 {
-                    system("cls");
+                    system(CLEAR);
                     printf("\nInvalid!\a");
                     goto see_invalid;
                 }
@@ -560,13 +573,13 @@ void see(void)
     }
     if (main_exit==1)
     {
-        system("cls");
+        system(CLEAR);
         menu();
     }
     else
     {
-        system("cls");
-        close();
+        system(CLEAR);
+        close_program();
     }
 
 }
@@ -574,15 +587,17 @@ void see(void)
 void menu(void)
 {   
     int choice;
-    system("cls");
+    system(CLEAR);
     //Color 9 is used for light blue text
+    #ifdef _WIN32
     system("color 9");
+    #endif
     printf("\n\n\t\t\tCUSTOMER ACCOUNT BANKING MANAGEMENT SYSTEM");
     printf("\n\n\n\t\t\t\xB2\xB2\xB2\xB2\xB2\xB2\xB2 WELCOME TO THE MAIN MENU \xB2\xB2\xB2\xB2\xB2\xB2\xB2");
     printf("\n\n\t\t1.Create new account\n\t\t2.Update information of existing account\n\t\t3.For transactions\n\t\t4.Check the details of existing account\n\t\t5.Removing existing account\n\t\t6.View customer's list\n\t\t7.Exit\n\n\n\n\n\t\t Enter your choice:");
     scanf("%d",&choice);
 
-    system("cls");
+    system(CLEAR);
     switch(choice)
     {
         case 1:new_acc();
@@ -597,7 +612,7 @@ void menu(void)
         break;
         case 6:view_list();
         break;
-        case 7:close();
+        case 7:close_program();
         break;
     }
 }
@@ -606,7 +621,7 @@ int main()
 {
     char pass[10],password[10]="12345";
     int i=0;
-    system("cls");
+    system(CLEAR);
     printf("\n\n\t\tEnter the password to login:");
     scanf("%9s",pass);
     
@@ -618,7 +633,7 @@ int main()
             fordelay(100000000);
             printf(".");
         }
-        system("cls");
+        system(CLEAR);
         menu();
     }
     else
@@ -629,19 +644,19 @@ int main()
             scanf("%d",&main_exit);
             if (main_exit==1)
             {
-                system("cls");
+                system(CLEAR);
                 main();
             }
             else if (main_exit==0)
             {
-                system("cls");
-                close();
+                system(CLEAR);
+                close_program();
             }
             else
             {
                 printf("\nInvalid!");
                 fordelay(1000000000);
-                system("cls");
+                system(CLEAR);
                 goto login_try;
             }
 
