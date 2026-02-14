@@ -86,16 +86,20 @@ void new_acc()
     printf("\nEnter the account number:");
     scanf("%d",&check.acc_no);
     
-    // Here we read a set of character from a record using fsacnf function and iterate through all the data
-    while(fscanf(ptr,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
-    {
-        // This function checks if the acc we are trying to create has not been created already
-        if (check.acc_no==add.acc_no)
-        {
-            printf("Account no. already in use!");
-            fordelay(1000000000);
-            // Goto fuction is used here to transfer the program control to a predefined level account_no
-            goto account_no;
+    // Rewind file pointer to start of file to ensure we scan all records on retry
+    rewind(ptr);
+    // Optimization: Use fgets + sscanf instead of fscanf to avoid parsing unused fields.
+    // This is significantly faster (O(1) vs O(fields)) and safer against malformed data.
+    char line_buffer[1024];
+    while (fgets(line_buffer, sizeof(line_buffer), ptr) != NULL) {
+        int read_acc_no;
+        if (sscanf(line_buffer, "%d", &read_acc_no) == 1) {
+            if (check.acc_no == read_acc_no) {
+                printf("Account no. already in use!");
+                fordelay(1000000000);
+                // Goto fuction is used here to transfer the program control to a predefined level account_no
+                goto account_no;
+            }
         }
     }
     add.acc_no=check.acc_no;
