@@ -1,6 +1,16 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include "interest.h"
+
+#ifdef _WIN32
 #include<windows.h>
+#else
+#include <string.h>
+#include <strings.h>
+#define strcmpi strcasecmp
+// Mocking system("cls") and other windows-specific calls for non-windows platforms
+#define system(x) (void)0
+#endif
 int i,j;
 int main_exit;
 void menu();
@@ -26,12 +36,6 @@ struct
 }add,upd,check,rem,transaction; // Variables that would be use to call each entities inside the struct
 
 // We define the function that calculates the simple interest
-float interest(float t,float amount,int rate)
-{
-    float SI;
-    SI=(rate*t*amount)/100.0;
-    return (SI);
-}
 
 // Delay function is used to suspend execution of a program for a particular time.
 void fordelay(int j)
