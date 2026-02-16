@@ -207,37 +207,43 @@ void edit(void)
     printf("\nEnter the account no. of the customer whose info you want to change:");
     scanf("%d",&upd.acc_no);
 
-    // Here we read a set of character from a record using fsacnf function and iterate through all the data
-    while(fscanf(old,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
-    {
-        if (add.acc_no==upd.acc_no)
-        {   test=1;
-            printf("\nWhich information do you want to change?\n1.Address\n2.Phone\n\nEnter your choice(1 for address and 2 for phone):");
-            scanf("%d",&choice);
-            clear_screen();
-            if(choice==1)
-            {
-                printf("Enter the new address:");
-                scanf("%59s",upd.address);
-                // Here we print a set of character from a record that we added recently using fprintf function
-                fprintf(newrec,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,upd.address,add.citizenship,add.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
+    // Optimization: Use fgets + sscanf instead of fscanf to avoid parsing unused fields.
+    // This reduces CPU usage by avoiding full record parsing for non-matching records and uses simple string copy.
+    char line_buffer[1024];
+    while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
+        int read_acc_no;
+        if (sscanf(line_buffer, "%d", &read_acc_no) == 1) {
+            if (read_acc_no == upd.acc_no) {
+                // Found the record, now parse it fully
+                sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
+                       &add.acc_no, add.name, &add.dob.month, &add.dob.day, &add.dob.year,
+                       &add.age, add.address, add.citizenship, &add.phone, add.acc_type,
+                       &add.amt, &add.deposit.month, &add.deposit.day, &add.deposit.year);
+
+                test = 1;
+                printf("\nWhich information do you want to change?\n1.Address\n2.Phone\n\nEnter your choice(1 for address and 2 for phone):");
+                scanf("%d", &choice);
                 clear_screen();
-                printf("Changes saved!");
+                if (choice == 1) {
+                    printf("Enter the new address:");
+                    scanf("%59s", upd.address);
+                    // Write updated record
+                    fprintf(newrec, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n", add.acc_no, add.name, add.dob.month, add.dob.day, add.dob.year, add.age, upd.address, add.citizenship, add.phone, add.acc_type, add.amt, add.deposit.month, add.deposit.day, add.deposit.year);
+                    clear_screen();
+                    printf("Changes saved!");
+                } else if (choice == 2) {
+                    printf("Enter the new phone number:");
+                    scanf("%lf", &upd.phone);
+                    // Write updated record
+                    fprintf(newrec, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n", add.acc_no, add.name, add.dob.month, add.dob.day, add.dob.year, add.age, add.address, add.citizenship, upd.phone, add.acc_type, add.amt, add.deposit.month, add.deposit.day, add.deposit.year);
+                    clear_screen();
+                    printf("Changes saved!");
+                }
+            } else {
+                // Optimization: Copy-forward strategy.
+                // Instead of parsing and re-formatting, just copy the original line.
+                fputs(line_buffer, newrec);
             }
-            else if(choice==2)
-            {
-                printf("Enter the new phone number:");
-                scanf("%lf",&upd.phone);
-                // Here we print a set of character from a record that we added recently using fprintf function
-                fprintf(newrec,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,upd.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
-                clear_screen();
-                printf("Changes saved!");
-            }
-        }
-        else
-        {
-            // Here we print a set of character from a record that we added recently using fprintf function
-            fprintf(newrec,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
         }
     }
 
