@@ -4,7 +4,25 @@
 #ifdef _WIN32
 #include<windows.h>
 void clear_screen() {
-    system("cls");
+    // Optimization: Use Windows API to clear screen instead of system("cls")
+    // to avoid the overhead of spawning a new process.
+    COORD coordScreen = { 0, 0 };
+    DWORD cCharsWritten;
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    DWORD dwConSize;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    if (GetConsoleScreenBufferInfo(hConsole, &csbi)) {
+        dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
+        FillConsoleOutputCharacter(hConsole, (TCHAR)' ', dwConSize, coordScreen, &cCharsWritten);
+        FillConsoleOutputAttribute(hConsole, csbi.wAttributes, dwConSize, coordScreen, &cCharsWritten);
+        SetConsoleCursorPosition(hConsole, coordScreen);
+    }
+}
+
+void set_console_color(int color) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, color);
 }
 #else
 #include<unistd.h>
@@ -14,6 +32,16 @@ void clear_screen() {
     // Optimization: Use ANSI escape codes to clear screen instead of system("clear")
     // to avoid the overhead of spawning a new process.
     printf("\033[H\033[J");
+    fflush(stdout);
+}
+
+void set_console_color(int color) {
+    // Optimization: Use ANSI escape codes for color instead of system calls.
+    switch(color) {
+        case 9: printf("\033[94m"); break; // Light Blue
+        case 7: printf("\033[0m"); break;  // Reset/White
+        default: printf("\033[0m"); break;
+    }
     fflush(stdout);
 }
 #endif
@@ -63,9 +91,11 @@ void fordelay(int j)
 
 void close_program(void)
 {
+    // Reset terminal color before exiting
+    set_console_color(7);
     printf("\n\n\n\nThanks for visit!!\n");
     printf("\n\n\n\nBy:-\n");
-    printf("\t\tYash shah");
+    printf("\t\tYash shah\n");
 }
 
 void new_acc()
@@ -608,11 +638,9 @@ void see(void)
 void menu(void)
 {
     int choice;
-    clear_screen();
     //Color 9 is used for light blue text
-    #ifdef _WIN32
-    system("color 9");
-    #endif
+    set_console_color(9);
+    clear_screen();
     printf("\n\n\t\t\tCUSTOMER ACCOUNT BANKING MANAGEMENT SYSTEM");
     printf("\n\n\n\t\t\t\xB2\xB2\xB2\xB2\xB2\xB2\xB2 WELCOME TO THE MAIN MENU \xB2\xB2\xB2\xB2\xB2\xB2\xB2");
     printf("\n\n\t\t1.Create new account\n\t\t2.Update information of existing account\n\t\t3.For transactions\n\t\t4.Check the details of existing account\n\t\t5.Removing existing account\n\t\t6.View customer's list\n\t\t7.Exit\n\n\n\n\n\t\t Enter your choice:");
