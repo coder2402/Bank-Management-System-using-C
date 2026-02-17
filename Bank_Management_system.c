@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include "interest.h"
 #ifdef _WIN32
 #include<windows.h>
 void clear_screen() {
@@ -42,13 +43,6 @@ struct
     struct date withdraw;
 }add,upd,check,rem,transaction; // Variables that would be use to call each entities inside the struct
 
-// We define the function that calculates the simple interest
-float interest(float t,float amount,int rate)
-{
-    float SI;
-    SI=(rate*t*amount)/100.0;
-    return (SI);
-}
 
 // Delay function is used to suspend execution of a program for a particular time.
 void fordelay(int j)
