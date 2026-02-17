@@ -10,6 +10,9 @@ void clear_screen() {
 #include<unistd.h>
 #include<strings.h>
 #define strcmpi strcasecmp
+#define RECORD_FILE "record.dat"
+#define TEMP_FILE "new.dat"
+
 void clear_screen() {
     // Optimization: Use ANSI escape codes to clear screen instead of system("clear")
     // to avoid the overhead of spawning a new process.
@@ -76,7 +79,7 @@ void new_acc()
     // Here we create a file in both reading and writing mode, that file would save the details about each accounts
     // a++ -> the file is opened for reading and writing at end of the file
 
-    ptr=fopen("record.dat","a+");
+    ptr=fopen(RECORD_FILE,"a+");
     account_no:
     // Cls is a command to clear the output screen
     clear_screen();
@@ -155,7 +158,7 @@ void view_list()
     FILE *view;
     // Here we create a file in reading mode only
     // r -> open the file for reading only
-    view = fopen("record.dat", "r");
+    view = fopen(RECORD_FILE, "r");
     int test = 0;
     // Cls is a command to clear the output screen
     clear_screen();
@@ -199,10 +202,10 @@ void edit(void)
     FILE *old,*newrec;
     // Here we create a file in reading mode only
     // r -> open the file for reading only
-    old = fopen("record.dat", "r");
+    old = fopen(RECORD_FILE, "r");
     // Here we create a file in writing mode only
     // w -> open the file for writing only
-    newrec = fopen("new.dat", "w");
+    newrec = fopen(TEMP_FILE, "w");
 
     printf("\nEnter the account no. of the customer whose info you want to change:");
     scanf("%d",&upd.acc_no);
@@ -251,8 +254,8 @@ void edit(void)
     fclose(old);
     fclose(newrec);
     // Delete the old record file and rename the new one to old
-    remove("record.dat");
-    rename("new.dat", "record.dat");
+    remove(RECORD_FILE);
+    rename(TEMP_FILE, RECORD_FILE);
 
     if(test!=1)
         {
@@ -296,10 +299,10 @@ void transact(void)
     FILE *old, *newrec;
     // Here we create a file in reading mode only
     // r -> open the file for reading only
-    old = fopen("record.dat", "r");
+    old = fopen(RECORD_FILE, "r");
     // Here we create a file in writing mode only
     // w -> open the file for writing only
-    newrec = fopen("new.dat", "w");
+    newrec = fopen(TEMP_FILE, "w");
 
     printf("Enter the account no. of the customer:");
     scanf("%d", &transaction.acc_no);
@@ -352,8 +355,8 @@ void transact(void)
     }
     fclose(old);
     fclose(newrec);
-    remove("record.dat");
-    rename("new.dat","record.dat");
+    remove(RECORD_FILE);
+    rename(TEMP_FILE,RECORD_FILE);
     if(test!=1)
     {
         printf("\n\nRecord not found!!");
@@ -393,10 +396,10 @@ void erase(void)
     FILE *old, *newrec;
     // Here we create a file in reading mode only
     // r -> open the file for reading only
-    old = fopen("record.dat", "r");
+    old = fopen(RECORD_FILE, "r");
     // Here we create a file in writing mode only
     // w -> open the file for writing only
-    newrec = fopen("new.dat", "w");
+    newrec = fopen(TEMP_FILE, "w");
     int test = 0;
 
     printf("Enter the account no. of the customer you want to delete:");
@@ -416,8 +419,8 @@ void erase(void)
     }
     fclose(old);
     fclose(newrec);
-    remove("record.dat");
-    rename("new.dat","record.dat");
+    remove(RECORD_FILE);
+    rename(TEMP_FILE,RECORD_FILE);
     if(test==0)
         {
             printf("\nRecord not found!!\a\a\a");
@@ -460,7 +463,7 @@ void see(void)
     float intrst;
     // Here we create a file in reading mode only
     // r -> open the file for reading only
-    ptr=fopen("record.dat","r");
+    ptr=fopen(RECORD_FILE,"r");
 
     printf("Do you want to check by\n1.Account no\n2.Name\nEnter your choice:");
     scanf("%d",&choice);
