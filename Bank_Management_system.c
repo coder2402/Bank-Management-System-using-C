@@ -3,20 +3,18 @@
 #include<string.h>
 #ifdef _WIN32
 #include<windows.h>
-void clear_screen() {
-    system("cls");
-}
 #else
 #include<unistd.h>
 #include<strings.h>
 #define strcmpi strcasecmp
+#endif
+
 void clear_screen() {
-    // Optimization: Use ANSI escape codes to clear screen instead of system("clear")
-    // to avoid the overhead of spawning a new process.
+    // Use ANSI escape codes to clear screen instead of system("cls") or system("clear")
+    // to avoid the overhead of spawning a new process and prevent command injection.
     printf("\033[H\033[J");
     fflush(stdout);
 }
-#endif
 
 int i,j;
 int main_exit;
@@ -609,10 +607,9 @@ void menu(void)
 {
     int choice;
     clear_screen();
-    //Color 9 is used for light blue text
-    #ifdef _WIN32
-    system("color 9");
-    #endif
+    // Use ANSI escape code for light blue text instead of system("color 9")
+    // to avoid command injection vulnerability and process overhead.
+    printf("\033[94m");
     printf("\n\n\t\t\tCUSTOMER ACCOUNT BANKING MANAGEMENT SYSTEM");
     printf("\n\n\n\t\t\t\xB2\xB2\xB2\xB2\xB2\xB2\xB2 WELCOME TO THE MAIN MENU \xB2\xB2\xB2\xB2\xB2\xB2\xB2");
     printf("\n\n\t\t1.Create new account\n\t\t2.Update information of existing account\n\t\t3.For transactions\n\t\t4.Check the details of existing account\n\t\t5.Removing existing account\n\t\t6.View customer's list\n\t\t7.Exit\n\n\n\n\n\t\t Enter your choice:");
@@ -640,6 +637,17 @@ void menu(void)
 
 int main()
 {
+#ifdef _WIN32
+    // Enable ANSI escape sequence support on Windows 10+
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut != INVALID_HANDLE_VALUE) {
+        DWORD dwMode = 0;
+        if (GetConsoleMode(hOut, &dwMode)) {
+            dwMode |= 0x0004; // ENABLE_VIRTUAL_TERMINAL_PROCESSING
+            SetConsoleMode(hOut, dwMode);
+        }
+    }
+#endif
     char pass[10],password[10]="12345";
     int i=0;
     clear_screen();
