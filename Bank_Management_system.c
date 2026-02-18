@@ -465,11 +465,21 @@ void see(void)
         printf("Enter the account number:");
         scanf("%d",&check.acc_no);
 
-        // Here we read a set of character from a record using fsacnf function and iterate through all the data
-        while (fscanf(ptr,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+        // Optimization: Use fgets + sscanf instead of fscanf to avoid parsing unused fields.
+        // This reduces CPU overhead significantly by only parsing full record when necessary.
+        char line_buffer[1024];
+        while (fgets(line_buffer, sizeof(line_buffer), ptr) != NULL)
         {
-            if(add.acc_no==check.acc_no)
-            {   clear_screen();
+            int read_acc_no;
+            // Check if line has an account number and if it matches first
+            if (sscanf(line_buffer, "%d", &read_acc_no) == 1 && read_acc_no == check.acc_no) {
+                // Only then parse the full record
+                sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
+                        &add.acc_no, add.name, &add.dob.month, &add.dob.day, &add.dob.year,
+                        &add.age, add.address, add.citizenship, &add.phone, add.acc_type,
+                        &add.amt, &add.deposit.month, &add.deposit.day, &add.deposit.year);
+
+                clear_screen();
                 test=1;
 
                 printf("\nAccount NO.:%d\nName:%s \nDOB:%d/%d/%d \nAge:%d \nAddress:%s \nCitizenship No:%s \nPhone number:%.0lf \nType Of Account:%s \nAmount deposited:$ %.2f \nDate Of Deposit:%d/%d/%d\n\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,
@@ -513,11 +523,19 @@ void see(void)
     else if (choice==2)
     {   printf("Enter the name:");
         scanf("%59s",check.name);
-        while (fscanf(ptr,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
+        // Optimization: Use fgets + sscanf instead of fscanf to avoid parsing unused fields.
+        char line_buffer[1024];
+        while (fgets(line_buffer, sizeof(line_buffer), ptr) != NULL)
         {
-            // strcmpi function returns 0 if the given two strings are same, a negative when first>second, positive when first<second.
-            if(strcmpi(add.name,check.name)==0)
-            {
+            char read_name[60];
+            // Skip account number (%*d) and read only the name to check match
+            if (sscanf(line_buffer, "%*d %59s", read_name) == 1 && strcmpi(read_name, check.name) == 0) {
+                // Found match, parse full record
+                sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
+                        &add.acc_no, add.name, &add.dob.month, &add.dob.day, &add.dob.year,
+                        &add.age, add.address, add.citizenship, &add.phone, add.acc_type,
+                        &add.amt, &add.deposit.month, &add.deposit.day, &add.deposit.year);
+
                 clear_screen();
                 test=1;
                 printf("\nAccount No.:%d\nName:%s \nDOB:%d/%d/%d \nAge:%d \nAddress:%s \nCitizenship No:%s \nPhone number:%.0lf \nType Of Account:%s \nAmount deposited:$%.2f \nDate Of Deposit:%d/%d/%d\n\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,
