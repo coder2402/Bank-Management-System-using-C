@@ -9,3 +9,7 @@
 ## 2024-02-16 - [Edit Function Optimization]
 **Learning:** For functions that modify a single record in a large file, using `fgets` + `sscanf` for scanning and `fputs` for non-matching lines (Copy-Forward) is significantly faster (~19% measured on 100k records) than parsing every line with `fscanf` and re-writing with `fprintf`. It also preserves original formatting for untouched records.
 **Action:** Apply Copy-Forward strategy to `edit`, `erase`, and other file modification functions.
+
+## 2024-02-18 - [Optimized Record Search in `see()`]
+**Learning:** `fscanf` parses every field of every record even if the identifier doesn't match, which is O(N * fields). Replacing this with `fgets` + `sscanf` for just the identifier (O(N)) reduced CPU overhead significantly for large datasets. This pattern is consistent with previous optimizations but applied to read-only search functions.
+**Action:** Apply `fgets` + targeted `sscanf` to any function scanning a file for a specific record.
