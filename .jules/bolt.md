@@ -13,3 +13,7 @@
 ## 2024-02-18 - [Optimized Record Search in `see()`]
 **Learning:** `fscanf` parses every field of every record even if the identifier doesn't match, which is O(N * fields). Replacing this with `fgets` + `sscanf` for just the identifier (O(N)) reduced CPU overhead significantly for large datasets. This pattern is consistent with previous optimizations but applied to read-only search functions.
 **Action:** Apply `fgets` + targeted `sscanf` to any function scanning a file for a specific record.
+
+## 2024-05-24 - [Optimized Record Listing]
+**Learning:** For functions that display a list of records but only need a subset of fields, parsing the entire line with `fscanf` is inefficient. Using `fgets` to read the line and `sscanf` with assignment suppression (`%*`) to skip unused fields is significantly faster (~1.6x measured) and avoids unnecessary data conversion.
+**Action:** Use `fgets` + `sscanf` with suppression for selective field parsing in list views.
