@@ -668,19 +668,14 @@ int main()
     }
 #endif
     char pass[10],password[10]="12345";
-    int i=0;
+
     clear_screen();
     printf("\n\n\t\tEnter the password to login:");
     scanf("%9s",pass);
 
     if (strcmp(pass,password)==0)
     {
-        printf("\n\nPassword Match!\nLOADING");
-        for(i=0;i<=6;i++)
-        {
-            fordelay(100000000);
-            printf(".");
-        }
+        // Removed fake loading screen for performance
         clear_screen();
         menu();
     }
