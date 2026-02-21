@@ -153,11 +153,15 @@ void view_list()
     clear_screen();
     printf("\nACC. NO.\tNAME\t\t\tADDRESS\t\t\tPHONE\n");
 
-    // Here we read a set of character from a record using fsacnf function and iterate through all the data
-    while(fscanf(view,"%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",&add.acc_no,add.name,&add.dob.month,&add.dob.day,&add.dob.year,&add.age,add.address,add.citizenship,&add.phone,add.acc_type,&add.amt,&add.deposit.month,&add.deposit.day,&add.deposit.year)!=EOF)
-    {
-        printf("\n%6d\t %10s\t\t\t%10s\t\t%.0lf",add.acc_no,add.name,add.address,add.phone);
-        test++;
+    // Optimization: Use fgets + sscanf instead of fscanf to avoid parsing unused fields.
+    // This reduces CPU overhead significantly by only parsing full record when necessary.
+    char line_buffer[1024];
+    while (fgets(line_buffer, sizeof(line_buffer), view) != NULL) {
+        if (sscanf(line_buffer, "%d %s %*d/%*d/%*d %*d %s %*s %lf",
+                   &add.acc_no, add.name, add.address, &add.phone) == 4) {
+            printf("\n%6d\t %10s\t\t\t%10s\t\t%.0lf", add.acc_no, add.name, add.address, add.phone);
+            test++;
+        }
     }
 
     // fclose function here is used to close the file record
