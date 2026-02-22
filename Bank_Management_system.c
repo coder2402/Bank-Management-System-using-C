@@ -17,7 +17,6 @@ void clear_screen() {
     fflush(stdout);
 }
 
-int i,j;
 int main_exit;
 void menu();
 
@@ -62,7 +61,6 @@ void close_program(void)
 
 void new_acc()
 {
-    int choice;
     // We creted a file record
     FILE *ptr;
     // Here we create a file in both reading and writing mode, that file would save the details about each accounts
@@ -668,19 +666,13 @@ int main()
     }
 #endif
     char pass[10],password[10]="12345";
-    int i=0;
     clear_screen();
     printf("\n\n\t\tEnter the password to login:");
     scanf("%9s",pass);
 
     if (strcmp(pass,password)==0)
     {
-        printf("\n\nPassword Match!\nLOADING");
-        for(i=0;i<=6;i++)
-        {
-            fordelay(100000000);
-            printf(".");
-        }
+        printf("\n\nPassword Match!");
         clear_screen();
         menu();
     }
