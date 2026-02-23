@@ -10,6 +10,18 @@
 #define strcmpi strcasecmp
 #endif
 
+// Helper function to parse the first integer from a string using strtol for performance.
+// Returns 1 if successful, 0 otherwise.
+static int parse_first_int(const char *str, int *val) {
+    char *endptr;
+    long parsed = strtol(str, &endptr, 10);
+
+    if (endptr == str) return 0; // No digits found
+
+    *val = (int)parsed;
+    return 1;
+}
+
 void clear_screen() {
     // Use ANSI escape codes to clear screen instead of system("cls") or system("clear")
     // to avoid the overhead of spawning a new process and prevent command injection.
@@ -85,7 +97,8 @@ void new_acc()
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), ptr) != NULL) {
         int read_acc_no;
-        if (sscanf(line_buffer, "%d", &read_acc_no) == 1) {
+        // Optimization: Use strtol instead of sscanf for faster integer parsing
+        if (parse_first_int(line_buffer, &read_acc_no)) {
             if (check.acc_no == read_acc_no) {
                 printf("Account no. already in use!");
                 fordelay(1000000000);
@@ -208,7 +221,8 @@ void edit(void)
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
         int read_acc_no;
-        if (sscanf(line_buffer, "%d", &read_acc_no) == 1) {
+        // Optimization: Use strtol instead of sscanf for faster integer parsing
+        if (parse_first_int(line_buffer, &read_acc_no)) {
             if (read_acc_no == upd.acc_no) {
                 // Found the record, now parse it fully
                 sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
@@ -305,7 +319,8 @@ void transact(void)
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
         int read_acc_no;
-        if (sscanf(line_buffer, "%d", &read_acc_no) == 1) {
+        // Optimization: Use strtol instead of sscanf for faster integer parsing
+        if (parse_first_int(line_buffer, &read_acc_no)) {
             if (read_acc_no == transaction.acc_no) {
                 // Parse full record only if it matches
                 sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
@@ -403,7 +418,8 @@ void erase(void)
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
         int read_acc_no;
-        if (sscanf(line_buffer, "%d", &read_acc_no) == 1) {
+        // Optimization: Use strtol instead of sscanf for faster integer parsing
+        if (parse_first_int(line_buffer, &read_acc_no)) {
             if (read_acc_no != rem.acc_no) {
                 // Copy-forward strategy for non-matching records
                 fputs(line_buffer, newrec);
@@ -476,7 +492,8 @@ void see(void)
         {
             int read_acc_no;
             // Check if line has an account number and if it matches first
-            if (sscanf(line_buffer, "%d", &read_acc_no) == 1 && read_acc_no == check.acc_no) {
+            // Optimization: Use strtol instead of sscanf for faster integer parsing
+            if (parse_first_int(line_buffer, &read_acc_no) && read_acc_no == check.acc_no) {
                 // Only then parse the full record
                 sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
                         &add.acc_no, add.name, &add.dob.month, &add.dob.day, &add.dob.year,
