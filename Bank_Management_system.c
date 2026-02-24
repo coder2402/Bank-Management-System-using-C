@@ -84,8 +84,9 @@ void new_acc()
     // This is significantly faster (O(1) vs O(fields)) and safer against malformed data.
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), ptr) != NULL) {
-        int read_acc_no;
-        if (sscanf(line_buffer, "%d", &read_acc_no) == 1) {
+        char *endptr;
+        long read_acc_no = strtol(line_buffer, &endptr, 10);
+        if (endptr != line_buffer) {
             if (check.acc_no == read_acc_no) {
                 printf("Account no. already in use!");
                 fordelay(1000000000);
@@ -207,8 +208,9 @@ void edit(void)
     // This reduces CPU usage by avoiding full record parsing for non-matching records and uses simple string copy.
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
-        int read_acc_no;
-        if (sscanf(line_buffer, "%d", &read_acc_no) == 1) {
+        char *endptr;
+        long read_acc_no = strtol(line_buffer, &endptr, 10);
+        if (endptr != line_buffer) {
             if (read_acc_no == upd.acc_no) {
                 // Found the record, now parse it fully
                 sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
@@ -304,8 +306,9 @@ void transact(void)
     // This reduces CPU usage by ~10x for non-matching records and avoids re-formatting via fprintf.
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
-        int read_acc_no;
-        if (sscanf(line_buffer, "%d", &read_acc_no) == 1) {
+        char *endptr;
+        long read_acc_no = strtol(line_buffer, &endptr, 10);
+        if (endptr != line_buffer) {
             if (read_acc_no == transaction.acc_no) {
                 // Parse full record only if it matches
                 sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
@@ -402,8 +405,9 @@ void erase(void)
     // This reduces CPU usage by ~10x for non-matching records and avoids re-formatting via fprintf.
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
-        int read_acc_no;
-        if (sscanf(line_buffer, "%d", &read_acc_no) == 1) {
+        char *endptr;
+        long read_acc_no = strtol(line_buffer, &endptr, 10);
+        if (endptr != line_buffer) {
             if (read_acc_no != rem.acc_no) {
                 // Copy-forward strategy for non-matching records
                 fputs(line_buffer, newrec);
@@ -474,9 +478,10 @@ void see(void)
         char line_buffer[1024];
         while (fgets(line_buffer, sizeof(line_buffer), ptr) != NULL)
         {
-            int read_acc_no;
+            char *endptr;
             // Check if line has an account number and if it matches first
-            if (sscanf(line_buffer, "%d", &read_acc_no) == 1 && read_acc_no == check.acc_no) {
+            long read_acc_no = strtol(line_buffer, &endptr, 10);
+            if (endptr != line_buffer && read_acc_no == check.acc_no) {
                 // Only then parse the full record
                 sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
                         &add.acc_no, add.name, &add.dob.month, &add.dob.day, &add.dob.year,
