@@ -69,6 +69,13 @@ void new_acc()
     // a++ -> the file is opened for reading and writing at end of the file
 
     ptr=fopen("record.dat","a+");
+    if (ptr == NULL)
+    {
+        printf("\nError: Could not open or create record.dat. Please check permissions.\n");
+        fordelay(1000000000);
+        menu();
+        return;
+    }
     account_no:
     // Cls is a command to clear the output screen
     clear_screen();
@@ -148,6 +155,13 @@ void view_list()
     // Here we create a file in reading mode only
     // r -> open the file for reading only
     view = fopen("record.dat", "r");
+    if (view == NULL)
+    {
+        printf("\nError: Could not open record.dat. It may not exist yet or you lack permissions.\n");
+        fordelay(1000000000);
+        menu();
+        return;
+    }
     int test = 0;
     // Cls is a command to clear the output screen
     clear_screen();
@@ -196,9 +210,24 @@ void edit(void)
     // Here we create a file in reading mode only
     // r -> open the file for reading only
     old = fopen("record.dat", "r");
+    if (old == NULL)
+    {
+        printf("\nError: Could not open record.dat. It may not exist yet or you lack permissions.\n");
+        fordelay(1000000000);
+        menu();
+        return;
+    }
     // Here we create a file in writing mode only
     // w -> open the file for writing only
     newrec = fopen("new.dat", "w");
+    if (newrec == NULL)
+    {
+        printf("\nError: Could not create new.dat. Please check permissions.\n");
+        fclose(old);
+        fordelay(1000000000);
+        menu();
+        return;
+    }
 
     printf("\nEnter the account no. of the customer whose info you want to change:");
     scanf("%d",&upd.acc_no);
@@ -293,9 +322,24 @@ void transact(void)
     // Here we create a file in reading mode only
     // r -> open the file for reading only
     old = fopen("record.dat", "r");
+    if (old == NULL)
+    {
+        printf("\nError: Could not open record.dat. It may not exist yet or you lack permissions.\n");
+        fordelay(1000000000);
+        menu();
+        return;
+    }
     // Here we create a file in writing mode only
     // w -> open the file for writing only
     newrec = fopen("new.dat", "w");
+    if (newrec == NULL)
+    {
+        printf("\nError: Could not create new.dat. Please check permissions.\n");
+        fclose(old);
+        fordelay(1000000000);
+        menu();
+        return;
+    }
 
     printf("Enter the account no. of the customer:");
     scanf("%d", &transaction.acc_no);
@@ -390,9 +434,24 @@ void erase(void)
     // Here we create a file in reading mode only
     // r -> open the file for reading only
     old = fopen("record.dat", "r");
+    if (old == NULL)
+    {
+        printf("\nError: Could not open record.dat. It may not exist yet or you lack permissions.\n");
+        fordelay(1000000000);
+        menu();
+        return;
+    }
     // Here we create a file in writing mode only
     // w -> open the file for writing only
     newrec = fopen("new.dat", "w");
+    if (newrec == NULL)
+    {
+        printf("\nError: Could not create new.dat. Please check permissions.\n");
+        fclose(old);
+        fordelay(1000000000);
+        menu();
+        return;
+    }
     int test = 0;
 
     printf("Enter the account no. of the customer you want to delete:");
@@ -460,6 +519,13 @@ void see(void)
     // Here we create a file in reading mode only
     // r -> open the file for reading only
     ptr=fopen("record.dat","r");
+    if (ptr == NULL)
+    {
+        printf("\nError: Could not open record.dat. It may not exist yet or you lack permissions.\n");
+        fordelay(1000000000);
+        menu();
+        return;
+    }
 
     printf("Do you want to check by\n1.Account no\n2.Name\nEnter your choice:");
     scanf("%d",&choice);
