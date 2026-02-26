@@ -17,8 +17,6 @@ void clear_screen() {
     fflush(stdout);
 }
 
-int i,j;
-int main_exit;
 void menu();
 
 // Structure for the date
@@ -62,7 +60,7 @@ void close_program(void)
 
 void new_acc()
 {
-    int choice;
+    int main_exit;
     // We creted a file record
     FILE *ptr;
     // Here we create a file in both reading and writing mode, that file would save the details about each accounts
@@ -153,6 +151,7 @@ void new_acc()
 // This function checks the registered accounts
 void view_list()
 {
+    int main_exit;
     FILE *view;
     // Here we create a file in reading mode only
     // r -> open the file for reading only
@@ -206,7 +205,7 @@ void view_list()
 // This function edits the customer's info
 void edit(void)
 {
-    int choice,test=0;
+    int choice,test=0,main_exit;
     // We created 2 file one is our originaal file and second one in which we will edit
     FILE *old,*newrec;
     // Here we create a file in reading mode only
@@ -320,7 +319,7 @@ void edit(void)
 // Function for deposit and withdraw
 void transact(void)
 {
-    int choice, test = 0;
+    int choice, test = 0, main_exit;
     // We created 2 file one is our originaal file and second one in which we will edit
     FILE *old, *newrec;
     // Here we create a file in reading mode only
@@ -437,6 +436,7 @@ void transact(void)
 // Function that deletes users info
 void erase(void)
 {
+    int main_exit;
     // We created 2 file one is our originaal file and second one in which we will edit
     FILE *old, *newrec;
     // Here we create a file in reading mode only
@@ -523,7 +523,7 @@ void see(void)
 {
     FILE *ptr;
     int test=0,rate;
-    int choice;
+    int choice,main_exit;
     float time;
     float intrst;
     // Here we create a file in reading mode only
@@ -745,6 +745,7 @@ int main()
     }
 #endif
     char pass[10],password[10]="12345";
+    int main_exit;
 
     clear_screen();
     printf("\n\n\t\tEnter the password to login:");
