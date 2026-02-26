@@ -319,9 +319,11 @@ void transact(void)
                     printf("\a\a\a\n\nYOU CANNOT DEPOSIT OR WITHDRAW CASH IN FIXED ACCOUNTS!!!!!");
                     fordelay(1000000000);
                     clear_screen();
-                    // Note: This call to menu() exits the function, leaving files open.
-                    // Ideally should close files, but maintaining existing behavior.
+                    fclose(old);
+                    fclose(newrec);
+                    remove("new.dat");
                     menu();
+                    return;
                 }
                 printf("\n\nDo you want to\n1.Deposit\n2.Withdraw?\n\nEnter your choice(1 for deposit and 2 for withdraw):");
                 scanf("%d", &choice);
