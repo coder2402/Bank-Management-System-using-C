@@ -591,11 +591,11 @@ void see(void)
                         &add.age, add.address, add.citizenship, &add.phone, add.acc_type,
                         &add.amt, &add.deposit.month, &add.deposit.day, &add.deposit.year);
 
-                clear_screen();
-                test=1;
+                            clear_screen();
+                            test=1;
 
-                printf("\nAccount NO.:%d\nName:%s \nDOB:%d/%d/%d \nAge:%d \nAddress:%s \nCitizenship No:%s \nPhone number:%.0lf \nType Of Account:%s \nAmount deposited:$ %.2f \nDate Of Deposit:%d/%d/%d\n\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,
-                add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
+                            printf("\nAccount NO.:%d\nName:%s \nDOB:%d/%d/%d \nAge:%d \nAddress:%s \nCitizenship No:%s \nPhone number:%.0lf \nType Of Account:%s \nAmount deposited:$ %.2f \nDate Of Deposit:%d/%d/%d\n\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,
+                            add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
                 // strcmpi function returns 0 if the given two strings are same, a negative when first>second, positive when first<second.
                 if(strcmpi(add.acc_type,"fixed1")==0)
                     {
@@ -640,16 +640,29 @@ void see(void)
         while (fgets(line_buffer, sizeof(line_buffer), ptr) != NULL)
         {
             char read_name[60];
-            // Skip account number (%*d) and read only the name to check match
-            if (sscanf(line_buffer, "%*d %59s", read_name) == 1 && strcmpi(read_name, check.name) == 0) {
-                // Found match, parse full record
-                sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
+            // Optimization: Manually parse name to avoid sscanf overhead for non-matching records
+            char *ptr_start = strchr(line_buffer, ' ');
+            if (ptr_start) {
+                // Robustly skip all whitespace between account number and name
+                while (*ptr_start == ' ') ptr_start++;
+
+                if (*ptr_start != '\0') {
+                    char *ptr_end = strchr(ptr_start, ' ');
+                    if (ptr_end) {
+                        size_t len = ptr_end - ptr_start;
+                        if (len < 60) {
+                            memcpy(read_name, ptr_start, len);
+                            read_name[len] = '\0';
+
+                            if (strcmpi(read_name, check.name) == 0) {
+                            // Found match, parse full record
+                            sscanf(line_buffer, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d",
                         &add.acc_no, add.name, &add.dob.month, &add.dob.day, &add.dob.year,
                         &add.age, add.address, add.citizenship, &add.phone, add.acc_type,
                         &add.amt, &add.deposit.month, &add.deposit.day, &add.deposit.year);
 
-                clear_screen();
-                test=1;
+                            clear_screen();
+                            test=1;
                 printf("\nAccount No.:%d\nName:%s \nDOB:%d/%d/%d \nAge:%d \nAddress:%s \nCitizenship No:%s \nPhone number:%.0lf \nType Of Account:%s \nAmount deposited:$%.2f \nDate Of Deposit:%d/%d/%d\n\n",add.acc_no,add.name,add.dob.month,add.dob.day,add.dob.year,add.age,add.address,add.citizenship,add.phone,
                 add.acc_type,add.amt,add.deposit.month,add.deposit.day,add.deposit.year);
                 if(strcmpi(add.acc_type,"fixed1")==0)
@@ -680,11 +693,14 @@ void see(void)
                         rate=8;
                         intrst=interest(time,add.amt,rate);
                         printf("\n\nYou will get $.%.2f as interest on %d of every month",intrst,add.deposit.day);
-                }
-                else if(strcmpi(add.acc_type,"current")==0)
-                {
-                        printf("\n\nYou will get no interest\a\a");
+                            }
+                            else if(strcmpi(add.acc_type,"current")==0)
+                            {
+                                    printf("\n\nYou will get no interest\a\a");
 
+                            }
+                        }
+                    }
                 }
             }
         }
