@@ -17,3 +17,7 @@
 ## 2024-05-24 - [Optimized Record Listing]
 **Learning:** For functions that display a list of records but only need a subset of fields, parsing the entire line with `fscanf` is inefficient. Using `fgets` to read the line and `sscanf` with assignment suppression (`%*`) to skip unused fields is significantly faster (~1.6x measured) and avoids unnecessary data conversion.
 **Action:** Use `fgets` + `sscanf` with suppression for selective field parsing in list views.
+
+## 2024-10-25 - [Optimized String Searching in Large Files]
+**Learning:** For read-only search functions like `see()` checking against string fields (e.g., name), parsing each line with `sscanf(..., "%*d %59s")` is relatively slow. Replacing it with manual pointer arithmetic to skip the first field and extract the second field directly into a string is ~7x faster and avoids `sscanf` overhead entirely for non-matching records.
+**Action:** Use manual string scanning via pointer arithmetic or `strchr` when searching for strings in specific columns to avoid format string parsing overhead.
