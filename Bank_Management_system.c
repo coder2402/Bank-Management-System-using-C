@@ -298,11 +298,19 @@ void edit(void)
                     clear_screen();
                     printf("Changes saved!");
                 }
+                break;
             } else {
                 // Optimization: Copy-forward strategy.
                 // Instead of parsing and re-formatting, just copy the original line.
                 fputs(line_buffer, newrec);
             }
+        }
+    }
+
+    // Fast-forward copy the rest of the file without parsing
+    if (test == 1) {
+        while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
+            fputs(line_buffer, newrec);
         }
     }
 
@@ -422,12 +430,21 @@ void transact(void)
                     fprintf(newrec, "%d %s %d/%d/%d %d %s %s %lf %s %f %d/%d/%d\n", add.acc_no, add.name, add.dob.month, add.dob.day, add.dob.year, add.age, add.address, add.citizenship, add.phone, add.acc_type, add.amt, add.deposit.month, add.deposit.day, add.deposit.year);
                     printf("\n\nWithdrawn successfully!");
                 }
+                break;
             } else {
                 // For non-matching records, just write the line back to the new file
                 fputs(line_buffer, newrec);
             }
         }
     }
+
+    // Fast-forward copy the rest of the file without parsing
+    if (test == 1) {
+        while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
+            fputs(line_buffer, newrec);
+        }
+    }
+
     fclose(old);
     fclose(newrec);
     remove("record.dat");
@@ -510,9 +527,18 @@ void erase(void)
             } else {
                 test++;
                 printf("\nRecord deleted successfully!\n");
+                break;
             }
         }
     }
+
+    // Fast-forward copy the rest of the file without parsing
+    if (test == 1) {
+        while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
+            fputs(line_buffer, newrec);
+        }
+    }
+
     fclose(old);
     fclose(newrec);
     remove("record.dat");
@@ -629,6 +655,7 @@ void see(void)
                 {
                         printf("\n\nYou will get no interest\a\a");
                 }
+                break;
             }
         }
     }
@@ -694,10 +721,12 @@ void see(void)
                         intrst=interest(time,add.amt,rate);
                         printf("\n\nYou will get $.%.2f as interest on %d of every month",intrst,add.deposit.day);
                             }
-                            else if(strcmpi(add.acc_type,"current")==0)
-                            {
-                                    printf("\n\nYou will get no interest\a\a");
+                else if(strcmpi(add.acc_type,"current")==0)
+                {
+                        printf("\n\nYou will get no interest\a\a");
 
+                }
+                break;
                             }
                         }
                     }
