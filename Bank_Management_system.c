@@ -740,6 +740,7 @@ void see(void)
             }
         }
     }
+    }
 
     fclose(ptr);
     if(test!=1)
@@ -829,31 +830,35 @@ int main()
     char pass[10],password[10]="12345";
     int main_exit;
 
-    clear_screen();
-    printf("\n\n\t\tEnter the password to login:");
-    scanf("%9s",pass);
-
-    if (strcmp(pass,password)==0)
+    while (1)
     {
-        // Removed fake loading screen for performance
         clear_screen();
-        menu();
-    }
-    else
-    {
-        printf("\n\nWrong password!!\a\a\a");
+        printf("\n\n\t\tEnter the password to login:");
+        scanf("%9s",pass);
+
+        if (strcmp(pass,password)==0)
+        {
+            // Removed fake loading screen for performance
+            clear_screen();
+            menu();
+            break;
+        }
+        else
+        {
+            printf("\n\nWrong password!!\a\a\a");
             login_try:
             printf("\nEnter 1 to try again and 0 to exit:");
             scanf("%d",&main_exit);
             if (main_exit==1)
             {
                 clear_screen();
-                main();
+                continue;
             }
             else if (main_exit==0)
             {
                 clear_screen();
                 close_program();
+                break;
             }
             else
             {
@@ -862,7 +867,7 @@ int main()
                 clear_screen();
                 goto login_try;
             }
-
+        }
     }
     return 0;
 }
