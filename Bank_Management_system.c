@@ -268,6 +268,12 @@ void edit(void)
     // This reduces CPU usage by avoiding full record parsing for non-matching records and uses simple string copy.
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
+        // Optimization: Fast-forward copy for remaining records once target is found
+        if (test == 1) {
+            fputs(line_buffer, newrec);
+            continue;
+        }
+
         char *endptr;
         long read_acc_no_long = strtol(line_buffer, &endptr, 10);
         if (endptr != line_buffer) {
@@ -382,6 +388,12 @@ void transact(void)
     // This reduces CPU usage by ~10x for non-matching records and avoids re-formatting via fprintf.
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
+        // Optimization: Fast-forward copy for remaining records once target is found
+        if (test == 1) {
+            fputs(line_buffer, newrec);
+            continue;
+        }
+
         char *endptr;
         long read_acc_no_long = strtol(line_buffer, &endptr, 10);
         if (endptr != line_buffer) {
@@ -500,6 +512,12 @@ void erase(void)
     // This reduces CPU usage by ~10x for non-matching records and avoids re-formatting via fprintf.
     char line_buffer[1024];
     while (fgets(line_buffer, sizeof(line_buffer), old) != NULL) {
+        // Optimization: Fast-forward copy for remaining records once target is found
+        if (test > 0) {
+            fputs(line_buffer, newrec);
+            continue;
+        }
+
         char *endptr;
         long read_acc_no_long = strtol(line_buffer, &endptr, 10);
         if (endptr != line_buffer) {
@@ -629,6 +647,10 @@ void see(void)
                 {
                         printf("\n\nYou will get no interest\a\a");
                 }
+
+                // Optimization: Early return for see() once record is found
+                // Since account numbers are unique, no need to parse the rest of the file
+                break;
             }
         }
     }
@@ -699,6 +721,9 @@ void see(void)
                                     printf("\n\nYou will get no interest\a\a");
 
                             }
+
+                            // Optimization: Early return for see() once record is found
+                            break;
                         }
                     }
                 }
