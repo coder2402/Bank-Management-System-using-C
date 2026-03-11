@@ -309,7 +309,7 @@ void edit(void)
 
     // Fast-forward copy the rest of the file without parsing
     if (test == 1) {
-        char chunk[4096];
+        char chunk[16384];
         size_t bytes_read;
         while ((bytes_read = fread(chunk, 1, sizeof(chunk), old)) > 0) {
             fwrite(chunk, 1, bytes_read, newrec);
@@ -442,7 +442,7 @@ void transact(void)
 
     // Fast-forward copy the rest of the file without parsing
     if (test == 1) {
-        char chunk[4096];
+        char chunk[16384];
         size_t bytes_read;
         while ((bytes_read = fread(chunk, 1, sizeof(chunk), old)) > 0) {
             fwrite(chunk, 1, bytes_read, newrec);
@@ -538,7 +538,7 @@ void erase(void)
 
     // Fast-forward copy the rest of the file without parsing
     if (test == 1) {
-        char chunk[4096];
+        char chunk[16384];
         size_t bytes_read;
         while ((bytes_read = fread(chunk, 1, sizeof(chunk), old)) > 0) {
             fwrite(chunk, 1, bytes_read, newrec);
